@@ -1,7 +1,7 @@
-package com.datascope.architect.bc.storage.service
+package com.datascope.architect.bc.storage.repository
 
 import com.datascope.architect.bc.storage.service.net.UserNet
 
-interface IUserService {
+interface IUserRepository {
     suspend fun getUsers(): List<UserNet>
 }

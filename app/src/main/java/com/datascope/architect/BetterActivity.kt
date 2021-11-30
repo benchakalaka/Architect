@@ -3,7 +3,6 @@ package com.datascope.architect
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
@@ -11,6 +10,7 @@ import com.datascope.architect.vmcore.BetterViewModel
 import com.datascope.architect.vmcore.UiEvent
 import com.datascope.architect.vmcore.UiState
 import com.datascope.architect.vmcore.ViewBindingUtil
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,18 +26,12 @@ abstract class BetterActivity<
         TViewBinding : ViewBinding>(vmClass: KClass<TViewModel>) : AppCompatActivity() {
 
     protected val viewModel by lazy {
-        val viewModelDynamicClass: Class<TViewModel> = ViewBindingUtil.getClassWithIndex(
-            javaClass,
-            2
-        )
+        val viewModelDynamicClass: Class<TViewModel> = ViewBindingUtil.getClassWithIndex(javaClass, 2)
         // TODO: Cast viewModelDynamicClass to KClass<TViewModel>
         getViewModel(clazz = vmClass)
     }
 
     protected lateinit var ui: TViewBinding
-
-    private val runtimeViewModelType: Type?
-        get() = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] //as KClass<TViewModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

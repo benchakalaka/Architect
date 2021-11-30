@@ -1,4 +1,4 @@
-package com.datascope.architect.bc.viewmodel
+package com.datascope.architect.bc.ui.viewmodel
 
 import com.datascope.architect.vmcore.UiEvent
 import com.datascope.architect.vmcore.UiState

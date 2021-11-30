@@ -19,11 +19,11 @@ open class BetterViewModel<TUiState : UiState, TUiEvent : UiEvent>(initialState:
         viewModelScope.launch { block() }
     }
 
-    protected fun event(block: suspend CoroutineScope.() -> TUiEvent) {
+    protected fun emitEvent(block: suspend CoroutineScope.() -> TUiEvent) {
         viewModelScope.launch { _events.emit(block()) }
     }
 
-    protected fun state(block: suspend CoroutineScope.() -> TUiState) {
+    protected fun emitState(block: suspend CoroutineScope.() -> TUiState) {
         viewModelScope.launch { _states.emit(block()) }
     }
 }

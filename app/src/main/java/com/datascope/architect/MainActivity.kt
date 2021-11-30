@@ -1,13 +1,14 @@
 package com.datascope.architect
 
 import android.widget.Toast
+import com.datascope.architect.bc.ui.viewmodel.UserUiEvent
+import com.datascope.architect.bc.ui.viewmodel.UserUiState
+import com.datascope.architect.bc.ui.viewmodel.UserViewModel
 import com.datascope.architect.databinding.ActivityMainBinding
-import com.datascope.architect.bc.viewmodel.UserUiEvent
-import com.datascope.architect.bc.viewmodel.UserUiState
-import com.datascope.architect.bc.viewmodel.UserViewModel
 
 // TODO: move ViewModelClass to reflection to BetterActivity
 // TODO: add real service to fetch data
+// TODO: investigate UI binding
 
 class MainActivity : BetterActivity<
         UserUiEvent,
@@ -17,6 +18,7 @@ class MainActivity : BetterActivity<
 
     override fun ActivityMainBinding.renderUi() {
         btn.setOnClickListener { viewModel.showToastExample2() }
+        //btn.setOnClickListener { viewModel.getUsers() }
         btnText.setOnClickListener { viewModel.changeTextExample2() }
     }
 
@@ -38,3 +40,18 @@ class MainActivity : BetterActivity<
             .show()
     }
 }
+
+
+
+//    private val firstRunRequestPermissions = arrayOf(
+//        permission.INTERNET,
+//        permission.ACCESS_NETWORK_STATE,
+//
+//    )
+//
+//    private fun requestAppPermissions() {
+//        ContextCompat.checkSelfPermission(
+//            this,
+//            permission.INTERNET
+//        )
+//    }

@@ -12,6 +12,26 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
+
+val networkModule = module {
+
+    single<OkHttpClient> {
+        val cb = OkHttpClient.Builder()
+            .protocols(listOf(Protocol.HTTP_1_1))
+        createAuthInterceptor().apply { cb.addInterceptor(this) }
+        cb.build()
+    }
+
+    single<Retrofit> {
+        Retrofit.Builder()
+            .addConverterFactory(JacksonConverterFactory.create(jsonMapper))
+            .baseUrl("https://www.datascopesystem.com/DatatouchV4_dev/")
+            .client(get())
+            .build()
+    }
+}
+
+
 val jsonMapper by lazy {
     ObjectMapper().apply {
         disable(FAIL_ON_UNKNOWN_PROPERTIES)
@@ -47,23 +67,7 @@ fun createAuthInterceptor(): Interceptor {
     }
 }
 
-val networkModule = module {
 
-    single<OkHttpClient> {
-        val cb = OkHttpClient.Builder()
-            .protocols(listOf(Protocol.HTTP_1_1))
-        createAuthInterceptor().apply { cb.addInterceptor(this) }
-        cb.build()
-    }
-
-    single<Retrofit> {
-        Retrofit.Builder()
-            .addConverterFactory(JacksonConverterFactory.create(jsonMapper))
-            .baseUrl("https://www.datascopesystem.com/DatatouchV4_dev")
-            .client(get())
-            .build()
-    }
-}
 
 const val HTTP_HEADER_TOKEN = "Token"
 const val HTTP_HEADER_SITE_ID = "SiteId"
