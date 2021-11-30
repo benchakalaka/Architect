@@ -8,6 +8,7 @@ class UserRepositoryMapper {
     fun netUsersToUsers(users: List<UserNet>): List<User> {
         if (users.isEmpty())
             return listOf()
+
         return users.map { usr ->
             User().also {
                 it.fullName = usr.fullName.orEmpty()

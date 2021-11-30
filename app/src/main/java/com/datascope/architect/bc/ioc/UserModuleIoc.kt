@@ -13,10 +13,9 @@ import retrofit2.Retrofit
 
 val userModuleIoc = module {
     single<IUserApi> { get<Retrofit>().create(IUserApi::class.java) }
-
     single<UserRepositoryMapper> { UserRepositoryMapper() }
-    factory<IUserService> { UserService(get()) }
-    factory<IUserRepository> { UserRepository(get(), get()) }
+    single<IUserService> { UserService(get()) }
+    single<IUserRepository> { UserRepository(get(), get()) }
 
     viewModel { UserViewModel(get()) }
 }

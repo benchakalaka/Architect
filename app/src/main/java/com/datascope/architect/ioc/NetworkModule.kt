@@ -19,8 +19,6 @@ val networkModule = module {
     single<OkHttpClient> {
 
         val logging = HttpLoggingInterceptor()
-        // This crashes app while loading large files if logging level is not NONE
-        // Do not enable logging here
         logging.level = HttpLoggingInterceptor.Level.BODY
 
         val cb = OkHttpClient.Builder()

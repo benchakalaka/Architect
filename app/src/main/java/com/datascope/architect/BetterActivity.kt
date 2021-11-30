@@ -20,20 +20,24 @@ abstract class BetterActivity<
         TViewModel : BetterViewModel<TUiState, TUiEvent>,
         TViewBinding : ViewBinding> : AppCompatActivity() {
 
+    abstract fun onUiState(state: TUiState)
+    abstract fun onUiEvent(event: TUiEvent)
+    abstract fun TViewBinding.renderUi()
+    abstract fun provideViewModel(): TViewModel
+
     protected val viewModel: TViewModel by lazy {
         provideViewModel()
     }
 
-    private var _ui: TViewBinding? = null
-    protected val ui: TViewBinding get() = _ui!!
+    protected var ui: TViewBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _ui = ViewBindingUtil.inflate(
+        ui = ViewBindingUtil.inflate(
             layoutInflater, ViewBindingUtil.getViewBindingClass(viewClass = javaClass)
         )
 
-        setContentView(ui.root)
+        ui?.let {  setContentView(it.root) }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -42,16 +46,11 @@ abstract class BetterActivity<
             }
         }
 
-        ui.renderUi()
+        ui?.renderUi()
     }
 
     override fun onDestroy() {
-        _ui = null
+        ui = null
         super.onDestroy()
     }
-
-    abstract fun onUiState(state: TUiState)
-    abstract fun onUiEvent(event: TUiEvent)
-    abstract fun TViewBinding.renderUi()
-    abstract fun provideViewModel(): TViewModel
 }
