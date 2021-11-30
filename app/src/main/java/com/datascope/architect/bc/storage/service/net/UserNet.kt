@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class UserNet {
     @JsonProperty("Id")
-    private val id: Int? = null
+    val id: Int? = null
 
     @JsonProperty("FullName")
-    private val fullName: String? = null
+    val fullName: String? = null
 }

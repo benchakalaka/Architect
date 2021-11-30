@@ -1,8 +1,8 @@
 package com.datascope.architect.bc.ui.viewmodel
 
-
 import com.datascope.architect.bc.storage.repository.IUserRepository
 import com.datascope.architect.vmcore.BetterViewModel
+import java.lang.Exception
 import kotlin.random.Random
 
 class UserViewModel(private val repo: IUserRepository) :
@@ -21,9 +21,6 @@ class UserViewModel(private val repo: IUserRepository) :
     }
 
     fun changeTextExample1() = call {
-        //_states.emit(State.Loading)
-        // call service suspend
-
         _states.emit(UserUiState.TextChanged(Random.nextInt().toString()))
     }
 
@@ -32,7 +29,6 @@ class UserViewModel(private val repo: IUserRepository) :
     }
 
     fun getUsers() = emitState {
-        val users = repo.getUsers()
-        UserUiState.TextChanged("AABBCC")
+        UserUiState.UsersFetched(repo.getUsers())
     }
 }

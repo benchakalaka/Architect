@@ -8,6 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -16,9 +17,16 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 val networkModule = module {
 
     single<OkHttpClient> {
+
+        val logging = HttpLoggingInterceptor()
+        // This crashes app while loading large files if logging level is not NONE
+        // Do not enable logging here
+        logging.level = HttpLoggingInterceptor.Level.BODY
+
         val cb = OkHttpClient.Builder()
             .protocols(listOf(Protocol.HTTP_1_1))
         createAuthInterceptor().apply { cb.addInterceptor(this) }
+        cb.addInterceptor(logging)
         cb.build()
     }
 
@@ -54,7 +62,9 @@ fun createAuthInterceptor(): Interceptor {
         val requestBuilder = chain.request().newBuilder()
 
         requestBuilder.addHeader(HTTP_HEADER_TOKEN, HTTP_HEADER_DEF_TOKEN)
-        requestBuilder.addHeader(HTTP_HEADER_SITE_ID, HTTP_HEADER_EMPTY_SITE_ID)
+        requestBuilder.addHeader(HTTP_HEADER_SITE_ID, "2")
+
+
 
         requestBuilder
             .addHeader(HTTP_HEADER_DATABASE, "Quilt_Development")
@@ -63,7 +73,7 @@ fun createAuthInterceptor(): Interceptor {
             .addHeader(HTTP_HEADER_VERSION_PARAMS, "0.0.1")
 
         request = requestBuilder.build()
-        chain.proceed(request!!)
+        chain.proceed(request)
     }
 }
 
