@@ -1,3 +1,3 @@
 package com.datascope.architect.vmcore
 
-abstract class UiAction
+abstract class UiEvent

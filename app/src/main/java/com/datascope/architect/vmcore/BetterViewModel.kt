@@ -3,22 +3,27 @@ package com.datascope.architect.vmcore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-abstract class BetterViewModel<TState : UiState, TAction : UiAction> : ViewModel() {
-    protected val states by lazy { MutableStateFlow(initialState()) }
-    val uiState = states.asStateFlow()
-    abstract fun initialState(): TState
+open class BetterViewModel<TUiState : UiState, TUiEvent : UiEvent>(initialState: TUiState) :
+    ViewModel() {
 
-    protected val actions = MutableSharedFlow<TAction>(replay = 0)
-    val uiAction: SharedFlow<TAction>
-        get() = actions
+    protected val _states by lazy { MutableStateFlow(initialState) }
+    val uiStates = _states.asStateFlow()
+
+    protected val _events by lazy { MutableSharedFlow<TUiEvent>(replay = 0) }
+    val uiEvents = _events.asSharedFlow()
 
     protected fun call(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch { block() }
+    }
+
+    protected fun event(block: suspend CoroutineScope.() -> TUiEvent) {
+        viewModelScope.launch { _events.emit(block()) }
+    }
+
+    protected fun state(block: suspend CoroutineScope.() -> TUiState) {
+        viewModelScope.launch { _states.emit(block()) }
     }
 }

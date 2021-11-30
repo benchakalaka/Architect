@@ -2,6 +2,7 @@ package com.datascope.architect
 
 import android.app.Application
 import com.datascope.architect.ioc.architectModule
+import com.datascope.architect.ioc.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,7 +20,7 @@ class ArchitectApplication : Application() {
             //inject Android context
             androidContext(this@ArchitectApplication)
             // use modules
-            modules(architectModule)
+            modules(architectModule, networkModule)
         }
 
     }
