@@ -1,20 +1,15 @@
 package com.datascope.architect
 
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import com.datascope.architect.bc.storage.service.api.IUserApi
 import com.datascope.architect.bc.ui.viewmodel.UserUiEvent
 import com.datascope.architect.bc.ui.viewmodel.UserUiState
-import com.datascope.architect.bc.ui.viewmodel.UserUiState.*
 import com.datascope.architect.bc.ui.viewmodel.UserViewModel
 import com.datascope.architect.databinding.ActivityMainBinding
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 // TODO: investigate UI binding
-
+// TODO: check viewModel lifecycle in koin
 class MainActivity : BetterActivity<
         UserUiEvent,
         UserUiState,
@@ -25,16 +20,15 @@ class MainActivity : BetterActivity<
         //btn.setOnClickListener { viewModel.showToastExample2() }
         btn.setOnClickListener { viewModel.getUsers() }
         btnText.setOnClickListener { viewModel.changeTextExample2() }
-
     }
 
     override fun onUiState(state: UserUiState) = when (state) {
-        is Initial -> {}
-        is TextChanged -> updateText(state)
-        is UsersFetched -> userFetched(state)
+        is UserUiState.Initial -> {}
+        is UserUiState.TextChanged -> updateText(state)
+        is UserUiState.UsersFetched -> userFetched(state)
     }
 
-    private fun userFetched(state: UsersFetched) {
+    private fun userFetched(state: UserUiState.UsersFetched) {
         ui.txt.text = state.users.first().fullName
     }
 
@@ -53,17 +47,3 @@ class MainActivity : BetterActivity<
 
     override fun provideViewModel(): UserViewModel = getViewModel()
 }
-
-
-//    private val firstRunRequestPermissions = arrayOf(
-//        permission.INTERNET,
-//        permission.ACCESS_NETWORK_STATE,
-//
-//    )
-//
-//    private fun requestAppPermissions() {
-//        ContextCompat.checkSelfPermission(
-//            this,
-//            permission.INTERNET
-//        )
-//    }

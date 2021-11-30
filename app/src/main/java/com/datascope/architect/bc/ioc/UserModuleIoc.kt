@@ -18,6 +18,5 @@ val userModuleIoc = module {
     factory<IUserService> { UserService(get()) }
     factory<IUserRepository> { UserRepository(get(), get()) }
 
-    // check viewModel lifecycle
     viewModel { UserViewModel(get()) }
 }
